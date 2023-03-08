@@ -419,7 +419,7 @@ mysql_stop() {
         for f in "${db_files[@]}"; do
             debug_execute fuser "$f" && return_value=1
         done
-        return $return_value
+        return "$return_value"
     }
 
     ! is_mysql_running && return
@@ -488,7 +488,7 @@ mysql_upgrade() {
     else
         mysql_start_bg
         is_boolean_yes "${ROOT_AUTH_ENABLED:-false}" && args+=("-p$(get_master_env_var_value ROOT_PASSWORD)")
-        debug_execute "${DB_BIN_DIR}/mysql_upgrade" "${args[@]}" --force
+        debug_execute "${DB_BIN_DIR}/mysql_upgrade" "${args[@]}" || echo "This installation is already upgraded"
     fi
 }
 
