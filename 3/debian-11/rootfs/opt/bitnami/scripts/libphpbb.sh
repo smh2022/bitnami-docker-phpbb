@@ -176,7 +176,7 @@ phpbb_initialize() {
             info "Configuring SMTP credentials"
             phpbb_set_installer_config "email_enable" "true" "bool"
             phpbb_set_installer_config "smtp_host" "$PHPBB_SMTP_HOST"
-            phpbb_set_installer_config "smtp_port" "$PHPBB_SMTP_PORT_NUMBER" "int"
+            phpbb_set_installer_config "smtp_port" "$PHPBB_SMTP_PORT" "int"
             phpbb_set_installer_config "smtp_auth" "$PHPBB_SMTP_PROTOCOL"
             phpbb_set_installer_config "smtp_user" "$PHPBB_SMTP_USER"
             phpbb_set_installer_config "smtp_pass" "$PHPBB_SMTP_PASSWORD"
