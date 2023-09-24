@@ -1,12 +1,16 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 FROM docker.io/bitnami/minideb:bullseye
 
 ARG TARGETARCH
 
-LABEL org.opencontainers.image.base.name="docker.io/bitnami/minideb:bullseye" \
-      org.opencontainers.image.created="2023-03-08T02:52:47Z" \
+LABEL com.vmware.cp.artifact.flavor="sha256:1e1b4657a77f0d47e9220f0c37b9bf7802581b93214fff7d1bd2364c8bf22e8e" \
+      org.opencontainers.image.base.name="docker.io/bitnami/minideb:bullseye" \
+      org.opencontainers.image.created="2023-09-22T04:59:02Z" \
       org.opencontainers.image.description="Application packaged by VMware, Inc" \
       org.opencontainers.image.licenses="Apache-2.0" \
-      org.opencontainers.image.ref.name="3.3.10-debian-11-r10" \
+      org.opencontainers.image.ref.name="3.3.10-debian-11-r105" \
       org.opencontainers.image.title="phpbb" \
       org.opencontainers.image.vendor="VMware, Inc." \
       org.opencontainers.image.version="3.3.10"
@@ -19,7 +23,7 @@ ENV HOME="/" \
 COPY prebuildfs /
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Install required system packages and dependencies
-RUN install_packages acl ca-certificates curl jq libaudit1 libbrotli1 libbsd0 libbz2-1.0 libcap-ng0 libcom-err2 libcrypt1 libcurl4 libexpat1 libffi7 libfftw3-double3 libfontconfig1 libfreetype6 libgcc-s1 libgcrypt20 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgpg-error0 libgssapi-krb5-2 libhogweed6 libicu67 libidn2-0 libjpeg62-turbo libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 liblcms2-2 libldap-2.4-2 liblqr-1-0 libltdl7 liblzma5 libmagickcore-6.q16-6 libmagickwand-6.q16-6 libmd0 libmemcached11 libncurses6 libnettle8 libnghttp2-14 libonig5 libp11-kit0 libpam0g libpcre2-8-0 libpcre3 libpng16-16 libpq5 libpsl5 libreadline8 librtmp1 libsasl2-2 libsodium23 libsqlite3-0 libssh2-1 libssl1.1 libstdc++6 libsybdb5 libtasn1-6 libtidy5deb1 libtinfo6 libunistring2 libuuid1 libwebp6 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxml2 libxslt1.1 libzip4 procps zlib1g
+RUN install_packages acl ca-certificates curl jq libaudit1 libbrotli1 libbsd0 libbz2-1.0 libcap-ng0 libcom-err2 libcrypt1 libcurl4 libexpat1 libffi7 libfftw3-double3 libfontconfig1 libfreetype6 libgcc-s1 libgcrypt20 libglib2.0-0 libgmp10 libgnutls30 libgomp1 libgpg-error0 libgssapi-krb5-2 libhogweed6 libicu67 libidn2-0 libjpeg62-turbo libk5crypto3 libkeyutils1 libkrb5-3 libkrb5support0 liblcms2-2 libldap-2.4-2 liblqr-1-0 libltdl7 liblzma5 libmagickcore-6.q16-6 libmagickwand-6.q16-6 libmd0 libmemcached11 libncurses6 libnettle8 libnghttp2-14 libonig5 libp11-kit0 libpam0g libpcre2-8-0 libpcre3 libpng16-16 libpq5 libpsl5 libreadline8 librtmp1 libsasl2-2 libsodium23 libsqlite3-0 libssh2-1 libssl1.1 libstdc++6 libsybdb5 libtasn1-6 libtidy5deb1 libtinfo6 libunistring2 libuuid1 libwebp6 libx11-6 libxau6 libxcb1 libxdmcp6 libxext6 libxml2 libxslt1.1 libzip4 openssl procps zlib1g
 RUN install_packages zip unzip vim less wget git
 RUN install_packages default-libmysqlclient-dev
 
@@ -28,13 +32,12 @@ COPY --from=composer/composer /usr/bin/composer /usr/bin/composer
 
 RUN mkdir -p /tmp/bitnami/pkg/cache/ && cd /tmp/bitnami/pkg/cache/ && \
     COMPONENTS=( \
-      "php-8.1.16-2-linux-${OS_ARCH}-debian-11" \
-      "apache-2.4.56-0-linux-${OS_ARCH}-debian-11" \
-      "mysql-client-10.6.12-1-linux-${OS_ARCH}-debian-11" \
-      "libphp-8.1.16-3-linux-${OS_ARCH}-debian-11" \
-      "render-template-1.0.5-1-linux-${OS_ARCH}-debian-11" \
-      "phpbb-3.3.10-1-linux-${OS_ARCH}-debian-11" \
-      "gosu-1.16.0-2-linux-${OS_ARCH}-debian-11" \
+      "php-8.2.10-7-linux-${OS_ARCH}-debian-11" \
+      "apache-2.4.57-11-linux-${OS_ARCH}-debian-11" \
+      "mysql-client-10.11.5-1-linux-${OS_ARCH}-debian-11" \
+      "libphp-8.2.10-2-linux-${OS_ARCH}-debian-11" \
+      "render-template-1.0.5-13-linux-${OS_ARCH}-debian-11" \
+      "phpbb-3.3.10-6-linux-${OS_ARCH}-debian-11" \
     ) && \
     for COMPONENT in "${COMPONENTS[@]}"; do \
       if [ ! -f "${COMPONENT}.tar.gz" ]; then \
@@ -46,6 +49,7 @@ RUN mkdir -p /tmp/bitnami/pkg/cache/ && cd /tmp/bitnami/pkg/cache/ && \
       rm -rf "${COMPONENT}".tar.gz{,.sha256} ; \
     done
 COPY cron.html /opt/bitnami/phpbb/styles/all/template/cron.html
+COPY .vimrc /.vimrc
 RUN apt-get update && apt-get upgrade -y && \
     apt-get clean && rm -rf /var/lib/apt/lists /var/cache/apt/archives
 RUN chmod g+rwX /opt/bitnami
@@ -67,8 +71,9 @@ EXPOSE 8080 8443
 RUN composer require aws/aws-sdk-php
 
 # Create a non-root user
-RUN useradd -r -u 1001 -g root nonroot
+RUN useradd -r -u 1001 -g root -m nonroot
 USER nonroot
+COPY .vimrc /home/nonroot/.vimrc
 RUN cat /etc/passwd
 RUN grep 1001 /etc/passwd
 # USER 1001
